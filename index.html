@@ -218,7 +218,7 @@ const SVC   = "6e400001-d4f7-4b8a-9c1e-5a1f0d4b7a01";
 const CMD   = "6e400002-d4f7-4b8a-9c1e-5a1f0d4b7a01";
 const STATE = "6e400003-d4f7-4b8a-9c1e-5a1f0d4b7a01";
 const MODES    = ["Music","Voice","Bluetooth"];
-const PATTERNS = ["Breathing","Chevron","Scanner","Rainbow rows","VU meter","Beat pulse","Centre burst","Voice bars"];
+const PATTERNS = ["Breathing","Chevron","Scanner","Rainbow rows","VU meter","Beat pulse","Centre burst","Voice bars","Spectrum bars"];
 const COLOURS  = [["Red","ff0000"],["Gold","ff9600"],["Blue","003cff"],["Green","00ff28"],["Purple","aa00ff"],["White","ffffff"]];
 const FX       = ["Clean","Daft Punk","Helmet robot","Deep","Ring robot","Radio"];
 const CHORDS   = ["Root and fifth","Octave","Single note","Minor chord"];
@@ -472,6 +472,8 @@ function drawFace(cv,h,t){
       case 5: v=Math.max(beat,env*.25); break;
       case 6: v=Math.max(0,Math.min(1,env*4-dist)); if(beat&&dist===0){c=[255,255,255];v=1;} break;
       case 7: { const sh=[.45,.65,.85,1][local], hh=env*sh*6; v=Math.max(0,Math.min(1,hh-Math.abs(row-5))); } break;
+      case 8: { const band=3-local, lv=Math.max(0,Math.min(1,(s.on?env:0)*(0.55+0.45*Math.sin(t*(3.8-band*.6)+band*1.3))*(band===0?1:1.15-band*.1)));
+                v=Math.max(0,Math.min(1,lv*rows-row)); const k=row/(rows-1)*.35; c=[base[0]+(255-base[0])*k,base[1]+(255-base[1])*k,base[2]+(255-base[2])*k]; } break;
     }
     if(s.pat<4&&(s.mode===0||s.mode===1)) v*=(s.mode===0?.1:.04)+(1-(s.mode===0?.1:.04))*Math.min(1,env*s.rct);
     if(!s.on) v=0;
